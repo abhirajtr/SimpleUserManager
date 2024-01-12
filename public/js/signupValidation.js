@@ -14,7 +14,7 @@ $(() => {
                 success: function (response) {
                     // displayMessage(response.message);
                     if(response.redirect) {
-                        location.href =  response.redirect;
+                        window.location.href =  response.redirect;
                     }
                 },
                 error: function(xhr, status, error) {
@@ -26,7 +26,7 @@ $(() => {
                         }
                     } catch (err) {
                         console.error('Error parsing JSON response');
-                        displayMessage('Unauthorized. Incorrect password!');
+                        // displayMessage('Unauthorized. Incorrect password!');
                     }
                 }
             })
