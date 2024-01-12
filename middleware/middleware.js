@@ -1,5 +1,13 @@
-function isLogged(req, res, next) {
-    req.session.user ? next() : res.redirect('/auth/login');
+function isLoggedAdmin(req, res, next) {
+
+    req.session.admin ? next() : res.redirect('/auth');
 }
 
-module.exports = isLogged;
+function isLoggedUser(req, res, next) {
+    req.session.user ? next() : res.redirect('/auth');
+}
+
+module.exports = {
+    isLoggedAdmin,
+    isLoggedUser
+}

@@ -16,7 +16,6 @@ const handleLogin = async (req, res) => {
         if (foundUser) {
             const isPasswordMatch = await foundUser.comparePassword(password);
             if (isPasswordMatch) {
-                req.session.user = true;
                 if (foundUser.isAdmin) {
                     req.session.admin = true;
                     return res.status(200).send({ redirect: '/admin' });
@@ -35,7 +34,10 @@ const handleLogin = async (req, res) => {
 }
 
 const renderSignupPage = (req, res) => {
-    res.render('user/signup')
+    if (req.session.admin) return res.redirect('/admin');
+
+    if (req.session.user) return res.redirect('/user');
+    res.render('user/signup');
 };
 const handleSignup = async (req, res) => {
     console.log("req.body", req.body);
@@ -55,6 +57,16 @@ const handleSignup = async (req, res) => {
         res.status(500).send({ message: 'Internal Server Error. Please try again later.' })
     }
 };
+const handleLogout = async (req, res) => {
+    try {
+        await req.session.destroy();
+        res.redirect('/auth');
+    } catch(err) {
+        console.error(err);
+        res.status(500).send('Internal Server Error');
+    }
+}
+
 
 
 
@@ -62,5 +74,6 @@ module.exports = {
     renderLoginPage,
     renderSignupPage,
     handleSignup,
-    handleLogin
+    handleLogin,
+    handleLogout
 }

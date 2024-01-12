@@ -1,3 +1,4 @@
+<%- include('admin-header') %>
 <section class="mx-auto w-full max-w-7xl px-4 py-4">
     <div class="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
         <div>
@@ -9,7 +10,7 @@
         </div>
         <div>
             <button type="button"
-                class="rounded-md bg-black px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                class="rounded-md bg-purple-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
                 Add new user
             </button>
         </div>
@@ -21,21 +22,21 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-4 py-3.5 text-left  text-gray-700">
+                                <th scope="col" class="px-10 py-3.5 text-left  text-gray-700">
                                     <span>Username</span>
                                 </th>
-                                <th scope="col" class="px-12 py-3.5 text-left text-gray-700">
+                                <th scope="col" class="px-10 py-3.5 text-left text-gray-700">
                                     Email address
                                 </th>
-                                <th scope="col" class="px-4 py-3.5 text-left text-gray-700">
+                                <th scope="col" class="px-10 py-3.5 text-left text-gray-700">
                                     Edit
                                 </th>
-                                <th scope="col" class="px-4 py-3.5 text-left  text-gray-700">
+                                <th scope="col" class="px-10 py-3.5 text-left  text-gray-700">
                                     Block / Unblock
                                 </th>
-                                <th scope="col" class="relative px-4 py-3.5 text-left">
+                                <!-- <th scope="col" class="relative px-4 py-3.5 text-left">
                                     Edit
-                                </th>
+                                </th> -->
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 bg-white">
@@ -44,7 +45,7 @@
 
                             <% users.forEach(user => { %>
                                 <tr>
-                                    <td class="whitespace-nowrap px-4 py-4 ">
+                                    <td class="whitespace-nowrap px-10 py-4 ">
                                         <div class="flex items-center">
                                             <!-- <div class="h-10 w-10 flex-shrink-0">
                                                 <img class="h-10 w-10 rounded-full object-cover"
@@ -59,28 +60,28 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-12 py-4">
+                                    <td class="whitespace-nowrap px-10 py-4">
                                         <div class="text-sm text-gray-900 "> <%= user.email %> </div>
                                         <!-- <div class="text-sm text-gray-700">Engineering</div> -->
                                     </td>
-                                    <td class="whitespace-nowrap px-4 py-4">
-                                        <a href="#" class="text-gray-700">
+                                    <td class="whitespace-nowrap px-10 py-4">
+                                        <a href="#" class="rounded-md bg-blue-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
                                             Edit
                                         </a>
                                     </td>
-                                    <td class="whitespace-nowrap px-4 py-4 text-sm text-gray-700">
-                                        <a href="#" class="text-gray-700">
-                                            Edit
+                                    <td class="whitespace-nowrap px-10 py-4 text-sm text-gray-700">
+                                        <a href="#" class="rounded-md bg-red-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                                            Block
                                         </a>
-                                        <a href="#" class="text-gray-700">
-                                            Edit
-                                        </a>
-                                    </td>
-                                    <td class="whitespace-nowrap px-4 py-3.5 text-left text-sm font-medium">
-                                        <a href="#" class="text-gray-700">
-                                            Edit
+                                        <a href="#" class="ml-2 rounded-md bg-green-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                                            Unblock
                                         </a>
                                     </td>
+                                    <!-- <td class="whitespace-nowrap px-4 py-3.5 text-left text-sm font-medium">
+                                        <a href="#" class="text-gray-700">
+                                            Edit
+                                        </a>
+                                    </td> -->
                                 </tr>
                             <% }) %>
 
@@ -92,3 +93,4 @@
         </div>
     </div>
 </section>
+<%- include('user-footer') %>
