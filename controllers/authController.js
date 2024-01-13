@@ -13,6 +13,10 @@ const handleLogin = async (req, res) => {
     // console.log(req.headers);
     try {
         const foundUser = await User.findOne({ email }, { _id: 0 });
+        if(foundUser.isBlocked) {
+            console.log("Blocked");
+            return res.status(403).json({ message: "Oops! It seems like your account has been temporarily blocked." });
+        }
         if (foundUser) {
             const isPasswordMatch = await foundUser.comparePassword(password);
             if (isPasswordMatch) {
@@ -49,7 +53,7 @@ const handleSignup = async (req, res) => {
             const newUser = new User({ username, email, password });
             const savedUser = await newUser.save();
             console.log(savedUser);
-            return res.status(201).send({ redirect: '/auth/login' })
+            return res.status(201).send({ redirect: '/auth/' });
         }
         res.status(409).send({ message: "Email address already in use. Please log in." });
     } catch (err) {

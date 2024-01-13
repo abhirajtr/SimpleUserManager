@@ -9,22 +9,18 @@ const renderAddUserPage = (req, res) => {
     res.render('admin/add-user');
 }
 const handleAddUser = async (req, res) => {
-    // console.log("req.body", req.body);
-
     const { username, email, password } = req.body;
     try {
         const foundUser = await User.findOne({ email });
         if (!foundUser) {
             const newUser = new User({ username, email, password });
-            const savedUser = await newUser.save();
-            // console.log(savedUser);
-            // return res.status(201).send({ redirect: '/auth/login' })
-            return res.status(201).send({ redirect: '/admin' });
+            await newUser.save();
+            return res.status(201).json({ redirect: '/admin' });
         }
-        res.status(409).send({ message: "User  already exists." });
+        res.status(409).json({ message: "User  already exists." });
     } catch (err) {
         console.error(err);
-        res.status(500).send({ message: 'Internal Server Error. Please try again later.' })
+        res.status(500).json({ message: 'Internal Server Error. Please try again later.' })
     }
 };
 
@@ -35,7 +31,7 @@ const renderEditUserPage = async (req, res) => {
         res.render('admin/edit-user', { user: foundUser });
     } catch (err) {
         console.error(err);
-        res.status(500).send('Internal Server Error. Please try again later.');
+        res.status(500).json('Internal Server Error. Please try again later.');
     }
 
 }
@@ -57,10 +53,36 @@ const handleEditUser = async (req, res) => {
     }
 }
 
+const handleBlockUser = async (req, res) => {
+    console.log("body", req.body);
+    try {
+        const userId = req.body.userId;
+        console.log("userID", userId);
+        await User.findByIdAndUpdate(userId, { isBlocked: true });
+        res.status(200).json({ message: 'User blocked successfully' });
+    } catch (error) {
+        
+    }
+}
+const handleUnblockUser = async (req, res) => {
+    console.log("body", req.body);
+    try {
+        const userId = req.body.userId;
+        console.log("userID", userId);
+        await User.findByIdAndUpdate(userId, { isBlocked: false });
+        res.status(200).json({ message: 'User unblocked successfully '});
+    } catch (error) {
+        console.error(error);
+        res.status(500).json('Internal Server Error. please try angain later.')
+    }
+}
+
 module.exports = {
     dashboard,
     renderAddUserPage,
     handleAddUser,
     renderEditUserPage,
-    handleEditUser
+    handleEditUser,
+    handleBlockUser,
+    handleUnblockUser
 }

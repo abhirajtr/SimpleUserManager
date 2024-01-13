@@ -12,22 +12,10 @@ $(() => {
                 data: formData,
                 dataType: 'json',
                 success: function (response) {
-                    // displayMessage(response.message);
-                    if(response.redirect) {
-                        window.location.href =  response.redirect;
-                    }
+                    handleSuccess(response);
                 },
-                error: function(xhr, status, error) {
-                    try {
-                        const response = JSON.parse(xhr.responseText);
-                        displayMessage(response.message);
-                        if(xhr.status === 409) {
-                            $('#email').focus();
-                        }
-                    } catch (err) {
-                        console.error('Error parsing JSON response');
-                        // displayMessage('Unauthorized. Incorrect password!');
-                    }
+                error: function (xhr, status, error) {
+                    handleError(xhr);
                 }
             })
         }
@@ -57,4 +45,20 @@ function displayMessage(msg) {
     setTimeout(() => {
         $('#validationmsg').text('');
     }, 2000)
+}
+function handleSuccess(response) {
+    window.location.href = response.redirect;
+}
+
+function handleError(xhr) {
+    try {
+        const response = JSON.parse(xhr.responseText);
+        displayMessage(response.message);
+        if (xhr.status === 409) {
+            $('#email').focus();
+        }
+    } catch (err) {
+        console.error('Error parsing JSON response');
+        // displayMessage('Unauthorized. Incorrect password!');
+    }
 }
