@@ -8,9 +8,22 @@
                     delete existing ones.
                 </p>
             </div>
+
+            <div class="flex grow justify-end mr-3">
+                <input id="searchInput" 
+                    class=" flex h-8 w-[250px] rounded-md bg-gray-100 px-3 py-3 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
+                    type="text" placeholder="Search User" />
+            </div>
+            <!-- <div class="hidden space-x-2 lg:block mr-10">
+                <button id="searchBtn"
+                    class="ml-2 rounded-md border border-blue-500 px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                    Search
+                </button>
+            </div> -->
             <div>
+
                 <a href="/admin/addUser"
-                    class="rounded-md bg-purple-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                    class="rounded-md bg-purple-700 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
                     Add new user
                 </a>
             </div>
@@ -42,12 +55,12 @@
                                 </th> -->
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-200 bg-white">
+                            <tbody id="usersTable" class="divide-y divide-gray-200 bg-white">
 
 
 
                                 <% users.forEach(user=> { %>
-                                    <tr  data-userId = "<%= user._id %>">
+                                    <tr data-userId="<%= user._id %>">
                                         <td class="whitespace-nowrap px-10 py-4 ">
                                             <div class="flex items-center">
                                                 <!-- <div class="h-10 w-10 flex-shrink-0">
@@ -71,11 +84,11 @@
                                         </td>
                                         <td class="whitespace-nowrap px-10 py-4">
                                             <a href="/admin/editUser/<%= user._id %>"
-                                                class="rounded-md bg-blue-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
+                                                class="rounded-md bg-blue-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-blue-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
                                                 Edit
                                             </a>
                                         </td>
-                                        <td class="whitespace-nowrap px-14 py-4 " >
+                                        <td class="whitespace-nowrap px-14 py-4 ">
                                             <div class="text-sm font-medium  text-gray-900" id="status-column">
                                                 <% if (user.isBlocked) { %>
                                                     <span class="text-red-700">Blocked</span>
@@ -84,21 +97,25 @@
                                                         <% } %>
                                             </div>
                                         </td>
-                                        <td class="whitespace-nowrap px-12 py-4 text-sm text-gray-700">
-                                            <button href="/admin/blockUser" id="blockUserBtn" 
-                                                class="rounded-md bg-red-700 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
-                                                Block
-                                            </button>
-                                            <button href="" id="unblockUserBtn"
-                                                class="ml-2 rounded-md bg-green-600 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-black/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black">
-                                                Unblock
-                                            </button>
+                                        
+                                        <td class="whitespace-nowrap px-12 py-4 text-sm text-gray-700" id="btn">
+                                            <div class="flex items-center">
+                                                <% if (user.isBlocked) { %>
+                                                    <button 
+                                                        class="w-20 bg-green-600 rounded-md px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-green-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black blockButton"
+                                                        data-userid="<%= user._id %>" data-action="/admin/unblockUser">
+                                                        Unblock
+                                                    </button>
+                                                    <% } else { %>
+                                                        <button
+                                                            class="w-20 bg-red-700 rounded-md px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-red-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black blockButton"
+                                                            data-userid="<%= user._id %>"
+                                                            data-action="/admin/blockUser">
+                                                            Block
+                                                        </button>
+                                                        <% } %>
+                                            </div>
                                         </td>
-                                        <!-- <td class="whitespace-nowrap px-4 py-3.5 text-left text-sm font-medium">
-                                        <a href="#" class="text-gray-700">
-                                            Edit
-                                        </a>
-                                    </td> -->
                                     </tr>
                                     <% }) %>
 

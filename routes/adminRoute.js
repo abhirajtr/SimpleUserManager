@@ -12,6 +12,7 @@ router.get('/editUser/:id', adminController.renderEditUserPage);
 router.post('/editUser', adminController.handleEditUser);
 router.post('/blockUser', adminController.handleBlockUser);
 router.post('/unblockUser', adminController.handleUnblockUser);
+router.post('/searchUser', adminController.handleSearchUser);
 
 
 module.exports = router;

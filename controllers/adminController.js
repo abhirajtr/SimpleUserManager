@@ -15,9 +15,11 @@ const handleAddUser = async (req, res) => {
         if (!foundUser) {
             const newUser = new User({ username, email, password });
             await newUser.save();
-            return res.status(201).json({ redirect: '/admin' });
+            return res.status(200).json({ redirect: '/admin', message: 'User added successfully' });
         }
+        
         res.status(409).json({ message: "User  already exists." });
+
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Internal Server Error. Please try again later.' })
@@ -54,27 +56,38 @@ const handleEditUser = async (req, res) => {
 }
 
 const handleBlockUser = async (req, res) => {
-    console.log("body", req.body);
     try {
         const userId = req.body.userId;
-        console.log("userID", userId);
         await User.findByIdAndUpdate(userId, { isBlocked: true });
-        res.status(200).json({ message: 'User blocked successfully' });
+        res.status(200).json({ status: 'Blocked', userId });
     } catch (error) {
-        
+        console.error(err);
+        res.status(500).json({ message: 'Internal Server Error.' })
     }
 }
 const handleUnblockUser = async (req, res) => {
-    console.log("body", req.body);
     try {
         const userId = req.body.userId;
-        console.log("userID", userId);
         await User.findByIdAndUpdate(userId, { isBlocked: false });
-        res.status(200).json({ message: 'User unblocked successfully '});
+        res.status(200).json({ status: 'Unblocked', userId });
     } catch (error) {
         console.error(error);
         res.status(500).json('Internal Server Error. please try angain later.')
     }
+}
+
+const handleSearchUser = async (req, res) => {
+    const searchInput = req.body.searchTerm;
+    // if(!searchInput) {
+    //     const users = await User.find({ $or: [{ isAdmin: { $exists: false } }, { isAdmin: false }] }, { password: 0 });
+    //     return res.status(200).json(users);
+    // }
+    // // const { searchInput } = req.body;
+    // const searchResult = await User.find({ $text: { $search: searchInput } });
+    // console.log(searchResult);
+    // res.status(200).json(searchResult);
+    const users = await User.find({ $and: [{ $or: [{ username: { $regex: new RegExp(searchInput, 'i') } }, { email: { $regex: new RegExp(searchInput, 'i') } }] }, { isAdmin: false }] });
+    res.status(200).json(users);
 }
 
 module.exports = {
@@ -84,5 +97,6 @@ module.exports = {
     renderEditUserPage,
     handleEditUser,
     handleBlockUser,
-    handleUnblockUser
+    handleUnblockUser,
+    handleSearchUser
 }

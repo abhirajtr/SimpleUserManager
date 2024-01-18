@@ -1,64 +1,65 @@
-$(() => {
-    $('#signupForm').on('submit', function (event) {
-        // console.log("clicked");
-        event.preventDefault();
-        let formData = $(this).serialize();
-        // console.log("formData", formData);
-        if (validateForm()) {
-            // $('form').submit();
-            $.ajax({
-                url: '/auth/signup',
-                type: 'POST',
-                data: formData,
-                dataType: 'json',
-                success: function (response) {
-                    handleSuccess(response);
-                },
-                error: function (xhr, status, error) {
-                    handleError(xhr);
-                }
-            })
-        }
-    })
-})
+const messageTimeout = 2000;
+$(document).ready(() => {
+    $('form').on('submit', handleFormSubmit)
+});
 
-function validateForm() {
-    let username = $('#username').val();
-    let email = $('#email').val();
-    let password = $('#password').val();
+function handleFormSubmit(event) {
+    event.preventDefault();
+    if (isValidForm()) {
+        const formData = $('form').serialize();
+        $.ajax({
+            url: '/auth/signup',
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: handleSuccess,
+            error: handleError
+        })
+    }
 
-    let emailRegex = /^[^\s@]+@gmail\.com$/;
+}
+
+function isValidForm() {
+    const username = $('#username').val();
+    const email = $('#email').val();
+    const password = $('#password').val();
+    const emailRegex = /^[a-z0-9]+@gmail\.com$/;
 
     if (username === '' || password === '') {
-        displayMessage('All fields are required')
+        displayMessage('All fields are required.');
         return false;
     }
     if (email === '' || !emailRegex.test(email)) {
-        displayMessage('Inavlid email address!');
-        return false;
+        displayMessage('Please enter a valid Gmail address.');
+        $('#email').focus();
+        return false
     }
     return true;
 }
 
-function displayMessage(msg) {
-    $('#validationmsg').text(msg);
+function displayMessage(message) {
+    $('#validationmsg').text(message);
     setTimeout(() => {
         $('#validationmsg').text('');
-    }, 2000)
+    }, messageTimeout);
 }
+
 function handleSuccess(response) {
+    // Redirect to the URL provided in the response
     window.location.href = response.redirect;
 }
 
 function handleError(xhr) {
-    try {
-        const response = JSON.parse(xhr.responseText);
-        displayMessage(response.message);
-        if (xhr.status === 409) {
-            $('#email').focus();
-        }
-    } catch (err) {
-        console.error('Error parsing JSON response');
-        // displayMessage('Unauthorized. Incorrect password!');
+    // Changed: Extracted the error message from responseJSON for clarity
+    const errorMessage = xhr.responseJSON.message;
+    
+    if (xhr.status === 409) {
+        displayMessage(errorMessage);
+        
+        setTimeout(() => {
+            window.location.href = '/auth/';
+        },3000);
+
+        $('#email').focus();
     }
 }
